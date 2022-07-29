@@ -18,7 +18,7 @@ var etapas = null
 var numeroDigitado = ''
 var votoEmBranco = false
 
-ajax('etapas.json', 'GET', (response) => {
+ajax('eleicao.php?candidato=123', 'GET', (response) => {
   etapas = JSON.parse(response)
   console.log(etapas)
 
@@ -102,14 +102,14 @@ function atualizarInterface() {
     rPartidoPolitico.querySelector('span').innerHTML = candidato['partido']
 
     rCandidato.style.display = 'block'
-    rCandidato.querySelector('.imagem img').src = `img/${candidato['foto']}`
+    rCandidato.querySelector('.imagem img').src = `${candidato['foto']}`
     rCandidato.querySelector('.cargo p').innerHTML = etapa['titulo']
     
     if (vice) {
       rNomeVice.style.display = 'block'
       rNomeVice.querySelector('span').innerHTML = vice['nome']
       rVice.style.display = 'block'
-      rVice.querySelector('.imagem img').src = `img/${vice['foto']}`
+      rVice.querySelector('.imagem img').src = `${vice['foto']}`
     } else {
       rNomeVice.style.display = 'none'
     }
@@ -200,6 +200,14 @@ function confirmar() {
         'numero': numeroDigitado
       })
       console.log(`Votou em ${numeroDigitado}`)
+
+      ajax('eleicao.php?voto=' + numeroDigitado, 'GET', (response) => {
+        etapas = JSON.parse(response)
+        console.log(etapas)
+      
+        comecarEtapa()
+      })
+
     } else {
       // Votou nulo
       votos.push({
@@ -226,6 +234,9 @@ function confirmar() {
   } else {
     document.querySelector('.tela').innerHTML = `
       <div class="fim">FIM</div>
+      <a href="resultado.php">
+        <button>Ver Resultados</button>
+      </a>
     `
   }
 
