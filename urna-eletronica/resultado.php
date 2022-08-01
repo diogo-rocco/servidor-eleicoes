@@ -1,16 +1,34 @@
 <?php
-// Connection settings
+/**
+ * Nome do servidor do banco de dados
+ */
 $servername = "localhost";
+/**
+ * Usuario de acesso ao banco de dados
+ */
 $username = "app_user";
+/**
+ * Senha de acesso do usuario para o banco de dados
+ */
 $password = "senha_app";
+/**
+ * Nome da base de dados
+ */
 $bdname = "base_eleitoral";
 
-// Create connection
+/**
+ * Objeto de conexão com o banco de dados
+ */
 $conn = mysqli_connect($servername, $username, $password, $bdname);
 if (mysqli_connect_error()) {
     die("Database Connection Error");
 }
 
+/**
+ * Faz a a consulta para obter o resultado atual da votação e monta o HTML da pagina com esse resultado
+ * 
+ * @return string contendo o HTML da pagina do resultado atual da votação
+ */
 function createPage()
 {
     $teste = "teste";
@@ -74,13 +92,9 @@ function createPage()
   }
 }
 
-function console_log( $data ){
-    echo '<script>';
-    echo 'console.log('. json_encode( $data ) .')';
-    echo '</script>';
-}
-
-
+/**
+ * manda para o front a página criada na função createPage()
+ */
 function main() {
     echo createPage();
 }

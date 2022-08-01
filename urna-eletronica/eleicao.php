@@ -1,17 +1,37 @@
 <?php
-// Connection settings
+/**
+ * Nome do servidor do banco de dados
+ */
 $servername = "localhost";
+/**
+ * Usuario de acesso ao banco de dados
+ */
 $username = "app_user";
+/**
+ * Senha de acesso do usuario para o banco de dados
+ */
 $password = "senha_app";
+/**
+ * Nome da base de dados
+ */
 $bdname = "base_eleitoral";
 
-// Create connection
+/**
+ * Objeto de conexão com o banco de dados
+ */
 $conn = mysqli_connect($servername, $username, $password, $bdname);
 if (mysqli_connect_error()) {
     die("Database Connection Error");
 }
 
-function get_candidato($numero_candidato){
+
+
+/**
+ * Imprime um objeto JSON com a informação de todos os candidatos no banco de dados, esse objeto vai ser recebido por uma função no front
+ * 
+ * @return void
+ */
+function get_candidato(){
     $result = mysqli_query($GLOBALS["conn"], 'SELECT * FROM candidaturas');
 
     if($result){
@@ -49,12 +69,25 @@ function get_candidato($numero_candidato){
     } else print("\nNenhum candidato encontrado");
 }
 
+/**
+ * Insere, na tabela de votos, um registro com o voto efetuado em um candidato
+ * 
+ * @param $numero_candidato numero do candidato que está sendo votado
+ * 
+ * @return void
+ */
 function count_vote($numero_candidato){
     $result = mysqli_query($GLOBALS["conn"], 'INSERT INTO votos (IdCandidaturaVotada)
     VALUE ((SELECT IdCandidatura FROM candidaturas WHERE NumeroCandidatura = ' . $numero_candidato . '))');
 }
 
-
+/**
+ * verifica se a variavel $_GET possui alguma chave válida (nessa aplicação as chaves válidas são "cadidato" e "voto"). Para cada chave ele direciona para a função devida
+ * 
+ * -> "candidato" chama a função get_candidato() para mandar para o front a lista de candidatos
+ * 
+ * -> "voto" chama a função count_vote($numero_candidato) para contabilizar o voto em um candidato
+ */
 function main() {
     $candidato_number = -1;
     
